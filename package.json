@@ -1,8 +1,8 @@
 {
 	"name": "panorama",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"private": true,
-	"repo":"ppp01",
+	"repo": "ppp01",
 	"scripts": {
 		"serve": "vue-cli-service serve",
 		"build": "vue-cli-service build",
