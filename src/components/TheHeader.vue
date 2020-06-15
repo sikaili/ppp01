@@ -1,12 +1,13 @@
 <template>
-  <div class="Header">
-    <div
+  <div class="TheHeader">
+    <router-link
       v-for="(item,index) in navigationItems"
       :key="index"
-      class="Header__item"
+      to="/"
+      class="TheHeader__item"
     >
       {{ item }}
-    </div>
+    </router-link>
   </div>
 </template>
 
@@ -22,7 +23,7 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-    .Header {
+    .TheHeader {
         position: fixed;
         top: 0;
         display: flex;
