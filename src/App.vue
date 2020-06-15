@@ -1,28 +1,30 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <the-header />
+    <!-- <p>Capacity: {{ capacity }}</p>
+    <button @click="increaseCapacity()">
+      Increase Capacity
+    </button> -->
+    <the-gallery />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { ref } from 'vue';
+import TheHeader from '@/components/TheHeader.vue';
+import TheGallery from '@/components/TheGallery.vue';
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  components: { TheHeader, TheGallery },
+  setup() {
+    const capacity = ref(3);
+    function increaseCapacity() {
+      capacity.value += 1;
+    }
+    return { capacity, increaseCapacity };
+  },
+};
 </script>
+<style scoped lang="scss">
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
