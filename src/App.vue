@@ -5,17 +5,16 @@
     <button @click="increaseCapacity()">
       Increase Capacity
     </button> -->
-    <the-gallery />
+    <router-view />
   </div>
 </template>
 
 <script>
 import { ref } from 'vue';
 import TheHeader from '@/components/TheHeader.vue';
-import TheGallery from '@/components/TheGallery.vue';
 
 export default {
-  components: { TheHeader, TheGallery },
+  components: { TheHeader },
   setup() {
     const capacity = ref(3);
     function increaseCapacity() {
