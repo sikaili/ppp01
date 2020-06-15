@@ -22,8 +22,10 @@ const commitsArray = output
 console.log(commitsArray);
 const currentChangelog = fs.readFileSync('./CHANGELOG.md', 'utf-8');
 const currentVersion = require('./package.json').version.split('.');
+const projectName = require('./package.json').repo;
 
 currentVersion[versionCore] = +currentVersion[versionCore] + 1;
+
 for (let i = versionCore + 1; i < 3; i += 1) {
   currentVersion[i] = 0;
 }
@@ -42,7 +44,7 @@ commitsArray.forEach((commit) => {
       `- ${commit.message.replace('added:', '')} ([${commit.sha.substring(
         0,
         6,
-      )}](https://github.com/sikaili/skyl.fr/commit/${
+      )}](https://github.com/sikaili/${projectName}/commit/${
         commit.sha.slice(0, 6)
       }))\n`,
     );
@@ -52,7 +54,7 @@ commitsArray.forEach((commit) => {
       `- ${commit.message.replace('fixed:', '')} ([${commit.sha.substring(
         0,
         6,
-      )}](https://github.com/sikaili/skyl.fr/commit/${
+      )}](https://github.com/sikaili/${projectName}/commit/${
         commit.sha.slice(0, 6)
       }))\n`,
     );
@@ -62,7 +64,7 @@ commitsArray.forEach((commit) => {
       `- ${commit.message.replace('changed:', '')} ([${commit.sha.substring(
         0,
         6,
-      )}](https://github.com/sikaili/skyl.fr/commit/${
+      )}](https://github.com/sikaili/${projectName}/commit/${
         commit.sha.slice(0, 6)
       }))\n`,
     );
