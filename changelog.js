@@ -9,6 +9,7 @@ const latestTag = child.execSync('git describe --long').toString('utf-8').split(
 const output = child
   .execSync(`git log ${latestTag}..HEAD --format=%B%H----DELIMITER----`)
   .toString('utf-8');
+console.log(output);
 
 const commitsArray = output
   .split('----DELIMITER----\n')
@@ -18,7 +19,7 @@ const commitsArray = output
     return { sha, message };
   })
   .filter((commit) => Boolean(commit.sha));
-
+console.log(commitsArray);
 const currentChangelog = fs.readFileSync('./CHANGELOG.md', 'utf-8');
 const currentVersion = require('./package.json').version.split('.');
 
@@ -34,7 +35,6 @@ let newChangelog = `## [${newVersion}] - ${
 const added = [];
 const fixed = [];
 const changed = [];
-
 
 commitsArray.forEach((commit) => {
   if (commit.message.startsWith('added:')) {
