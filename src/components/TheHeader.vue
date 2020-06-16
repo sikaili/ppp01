@@ -3,7 +3,7 @@
     <router-link
       v-for="(item,index) in navigationItems"
       :key="index"
-      to="/"
+      :to="'/' + item"
       class="TheHeader__item"
     >
       {{ item }}
@@ -17,7 +17,7 @@ import { ref } from 'vue';
 export default {
   name: 'TheHeader',
   setup() {
-    const navigationItems = ref(['PAYSAGE', 'PANORAMA', 'PROGRAM']);
+    const navigationItems = ref(['paysage', 'panorama', 'program']);
     return { navigationItems };
   },
 };
@@ -30,6 +30,7 @@ export default {
         flex-flow: row nowrap;
         justify-content: space-between;
         width: 100%;
+        text-transform: uppercase;
 
         &__item {
             margin: 24px;
