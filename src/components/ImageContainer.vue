@@ -25,5 +25,15 @@ export default {
         width: auto;
         background: white;
         border: 1px solid red;
+        object-fit: contain;
+        overflow: hidden;
+
+        img {
+            display: block;
+            width: 100%;
+            text-indent: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+        }
     }
 </style>
