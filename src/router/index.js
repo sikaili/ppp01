@@ -9,6 +9,8 @@ const router = createRouter({
     {
       path: '/',
       component: Paysage,
+      alias: ['/paysage', '/index.html', '/index.htm'],
+
     },
     {
       path: '/panorama',
