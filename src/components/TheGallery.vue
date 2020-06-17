@@ -64,7 +64,6 @@ export default {
       const onScroll = useDebounceFn(() => {
         const bottomOfWindow = document.documentElement.scrollTop + window.innerHeight >= document.documentElement.offsetHeight - 30;
         if (bottomOfWindow) {
-          console.log('here');
           addImage(20);
         }
       }, 200);
@@ -73,7 +72,8 @@ export default {
     onUnmounted(() => {
     });
     const handleClick = () => {
-      mouseImages.value.push({ x: x.value, y: y.value, src: images.value[currentImageIndex.value] });
+      const offset = -100;
+      mouseImages.value.push({ x: x.value + offset, y: y.value + offset, src: images.value[currentImageIndex.value] });
     };
     return {
       images, currentImageIndex, addImage, mouseImages, x, y, handleClick,

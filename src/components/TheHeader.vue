@@ -31,6 +31,7 @@ export default {
         flex-flow: row nowrap;
         justify-content: space-between;
         width: 100%;
+        max-width: 100vw;
         text-transform: uppercase;
         font-family: "Sporting Grotesque_Bold", "AdobeBlank", sans-serif;
         font-size: 28px;
@@ -43,6 +44,13 @@ export default {
 
             &:hover {
                 background-color: rgba(0,0,0, 0.4);
+            }
+        }
+
+        @media(max-width: 768px) {
+            &__item {
+                padding: 10px 5px;
+                font-size: 16px;
             }
         }
     }
