@@ -25,13 +25,13 @@ export default {
 <style scoped lang="scss">
     .TheHeader {
         position: fixed;
+        max-width: 100vw;
+        width: 100%;
         top: 0;
         z-index: 1000;
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-between;
-        width: 100%;
-        max-width: 100vw;
         text-transform: uppercase;
         font-family: "Sporting Grotesque_Bold", "AdobeBlank", sans-serif;
         font-size: 28px;
@@ -50,7 +50,7 @@ export default {
         @media(max-width: 768px) {
             &__item {
                 padding: 10px 5px;
-                font-size: 16px;
+                font-size: calc(100vw / 25);
             }
         }
     }
