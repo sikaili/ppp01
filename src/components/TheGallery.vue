@@ -9,7 +9,7 @@
       class="TheGallery__addImage"
       @click="addImage(linkToAdd)"
     >
-      <input v-model="linkToAdd">
+      <!-- <input v-model="linkToAdd"> -->
       +
     </div>
   </div>
@@ -22,19 +22,22 @@ import ImageContainer from '@/components/ImageContainer.vue';
 const useAddImage = () => {
   const images = ref([]);
   const fetchImage = async (index) => {
-    const response = await fetch('https://dog.ceo/api/breeds/image/random');
+    const response = await fetch('https://dog.ceo/api/breed/bulldog/french/images/random');
     const json = await response.json();
     images.value[index] = json.message;
   };
-  Array(5).fill('').map((a, i) => fetchImage(i));
+  [...Array(30)].map((a, i) => fetchImage(i));
+
   const addImage = (link) => {
     if (!link) {
+      fetchImage(images.value.length);
       return;
     }
     images.value.push(link);
   };
   return { images, addImage };
 };
+
 export default {
   components: { ImageContainer },
   setup() {
@@ -51,12 +54,15 @@ export default {
 <style scoped lang="scss">
     .TheGallery {
         display: flex;
-        flex-flow: row wrap;
+        flex-wrap: wrap;
+        width: calc(100% + 500px);
 
         &__addImage {
             width: 200px;
             height: 310px;
             border: 1px solid blue;
+            font-size: 48px;
+            background-color: rgba(100,100,200);
         }
     }
 </style>

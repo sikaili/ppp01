@@ -21,16 +21,17 @@ export default {
 <style scoped lang="scss">
     .ImageContainer {
         height: 310px;
-        min-width: 200px;
+        max-width: 500px;
         width: auto;
         background: white;
-        border: 1px solid red;
         object-fit: contain;
         overflow: hidden;
 
         img {
-            display: block;
-            width: 100%;
+            min-height: 100%;
+            min-width: 100%;
+            object-fit: fill;
+            vertical-align: bottom;
             text-indent: 100%;
             white-space: nowrap;
             overflow: hidden;
