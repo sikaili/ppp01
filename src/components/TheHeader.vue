@@ -31,9 +31,18 @@ export default {
         justify-content: space-between;
         width: 100%;
         text-transform: uppercase;
+        font-family: "Sporting Grotesque_Bold", "AdobeBlank", sans-serif;
+        font-size: 28px;
+        background-color: rgba(0,0,0, 0.3);
 
         &__item {
-            margin: 24px;
+            color: yellow;
+            padding: 18px 24px;
+            text-decoration: none;
+
+            &:hover {
+                background-color: rgba(0,0,0, 0.4);
+            }
         }
     }
 </style>

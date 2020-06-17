@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="App">
     <the-header />
     <!-- <p>Capacity: {{ capacity }}</p>
     <button @click="increaseCapacity()">
@@ -25,5 +25,8 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-
+    .App {
+        max-width: 100vw;
+        overflow: hidden;
+    }
 </style>
