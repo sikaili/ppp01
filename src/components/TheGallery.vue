@@ -1,48 +1,83 @@
 <template>
-  <div class="TheGallery">
+  <div
+    class="TheGallery"
+    @click="handleClick"
+  >
     <image-container
       v-for="(image, index) of images"
       :key="index"
       :src="image"
+      :class="{'TheGallery__grey':mouseImages.length > 0}"
+      @click="currentImageIndex = index"
     />
     <div
-      class="TheGallery__addImage"
-      @click="addImage(linkToAdd)"
+      v-if="mouseImages.length > 0"
     >
-      <!-- <input v-model="linkToAdd"> -->
-      +
+      <image-container
+        v-for="(image, index) of mouseImages"
+        :key="index + image"
+        class="TheGallery__add"
+        :src="image.src"
+        :style="{top:image.y +'px',left:image.x + 'px' }"
+        @click.stop="mouseImages.splice(index,1)"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
+import { useMouse, useStorage, useDebounceFn } from '@vueuse/core';
 import ImageContainer from '@/components/ImageContainer.vue';
 
 const useAddImage = () => {
   const images = ref([]);
-  const fetchImage = async (index) => {
+  const fetchImage = async () => {
     const response = await fetch('https://dog.ceo/api/breed/bulldog/french/images/random');
     const json = await response.json();
-    images.value[index] = json.message;
+    images.value.push(json.message);
   };
-  [...Array(30)].map((a, i) => fetchImage(i));
+  const addImage = (quantity = 1, links) => {
+    [...Array(quantity)].map((a, index) => {
+      if (!links) {
+        fetchImage();
+      } else {
+        images.value.push(links[index]);
+      }
+    });
+  };
+  addImage(20);
 
-  const addImage = (link) => {
-    if (!link) {
-      fetchImage(images.value.length);
-      return;
-    }
-    images.value.push(link);
-  };
   return { images, addImage };
 };
 
 export default {
   components: { ImageContainer },
+  // setup(props) {
+
   setup() {
+    const mouseImages = useStorage('images', []);
+    const currentImageIndex = ref(0);
     const { images, addImage } = useAddImage();
-    return { images, addImage };
+    const { x, y } = useMouse();
+    onMounted(() => {
+      const onScroll = useDebounceFn(() => {
+        const bottomOfWindow = document.documentElement.scrollTop + window.innerHeight >= document.documentElement.offsetHeight - 30;
+        if (bottomOfWindow) {
+          console.log('here');
+          addImage(20);
+        }
+      }, 200);
+      window.addEventListener('scroll', onScroll);
+    });
+    onUnmounted(() => {
+    });
+    const handleClick = () => {
+      mouseImages.value.push({ x: x.value, y: y.value, src: images.value[currentImageIndex.value] });
+    };
+    return {
+      images, currentImageIndex, addImage, mouseImages, x, y, handleClick,
+    };
   },
   data() {
     return {
@@ -57,12 +92,21 @@ export default {
         flex-wrap: wrap;
         width: calc(100% + 500px);
 
+        &__grey {
+            filter: grayscale(100%) !important;
+        }
+
         &__addImage {
             width: 200px;
             height: 310px;
             border: 1px solid blue;
             font-size: 48px;
             background-color: rgba(100,100,200);
+        }
+
+        &__add {
+            z-index: 10;
+            position: absolute;
         }
     }
 </style>

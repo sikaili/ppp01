@@ -26,6 +26,7 @@ export default {
     .TheHeader {
         position: fixed;
         top: 0;
+        z-index: 1000;
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-between;
