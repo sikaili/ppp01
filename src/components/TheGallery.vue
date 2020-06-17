@@ -19,6 +19,7 @@
         class="TheGallery__add"
         :src="image.src"
         :style="{top:image.y +'px',left:image.x + 'px' }"
+        :height="image.height"
         @click.stop="mouseImages.splice(index,1)"
       />
     </div>
@@ -27,7 +28,9 @@
 
 <script>
 import { ref, onMounted, onUnmounted } from 'vue';
-import { useMouse, useStorage, useDebounceFn } from '@vueuse/core';
+import {
+  useMouse, useStorage, useDebounceFn, useDeviceOrientation,
+} from '@vueuse/core';
 import ImageContainer from '@/components/ImageContainer.vue';
 
 const useAddImage = () => {
@@ -57,6 +60,7 @@ export default {
 
   setup() {
     const mouseImages = useStorage('images', []);
+    const { alpha } = useDeviceOrientation();
     const currentImageIndex = ref(0);
     const { images, addImage } = useAddImage();
     const { x, y } = useMouse();
@@ -73,7 +77,12 @@ export default {
     });
     const handleClick = () => {
       const offset = -100;
-      mouseImages.value.push({ x: x.value + offset, y: y.value + offset, src: images.value[currentImageIndex.value] });
+      mouseImages.value.push({
+        x: x.value + offset,
+        y: y.value + offset,
+        src: images.value[currentImageIndex.value],
+        get height() { return alpha.value < 100 ? 150 : alpha.value; },
+      });
     };
     return {
       images, currentImageIndex, addImage, mouseImages, x, y, handleClick,
