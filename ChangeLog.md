@@ -1,3 +1,10 @@
+## [0.1.4] - 2020-06-18
+### Fixed
+- responsive header on extreme small screens ([867847](https://github.com/sikaili/ppp01/commit/867847))
+- responsive issuses ([59f5be](https://github.com/sikaili/ppp01/commit/59f5be))
+### Changed
+- custom height imagecontainer ([08c4bc](https://github.com/sikaili/ppp01/commit/08c4bc))
+
 ## [0.1.3] - 2020-06-17
 ### Added
 - dog api test pictures ([8d821c](https://github.com/sikaili/ppp01/commit/8d821c))
