@@ -1,5 +1,7 @@
 <template>
-  <article-component />
+  <div>
+    <article-component />
+  </div>
 </template>
 
 <script>

@@ -1,5 +1,7 @@
 <template>
-  <the-gallery-component />
+  <div>
+    <the-gallery-component />
+  </div>
 </template>
 
 <script>
