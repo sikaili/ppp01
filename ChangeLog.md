@@ -1,3 +1,11 @@
+## [0.1.5] - 2020-06-18
+### Added
+- article page ([a7d741](https://github.com/sikaili/ppp01/commit/a7d741))
+### Fixed
+- router-view debug -- no component without wrapper div ([be667c](https://github.com/sikaili/ppp01/commit/be667c))
+### Changed
+- move scroll to bottom window to independant use ([356934](https://github.com/sikaili/ppp01/commit/356934))
+
 ## [0.1.4] - 2020-06-18
 ### Fixed
 - responsive header on extreme small screens ([867847](https://github.com/sikaili/ppp01/commit/867847))
