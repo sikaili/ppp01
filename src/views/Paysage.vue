@@ -1,12 +1,13 @@
 <template>
-  <the-gallery />
+  <the-gallery-component />
 </template>
 
 <script>
-import TheGallery from '@/components/TheGallery.vue';
+import TheGalleryComponent from '@/components/TheGallery.vue';
 
 export default {
-  components: { TheGallery },
+  name: 'Paysage',
+  components: { TheGalleryComponent },
 };
 </script>
 <style scoped lang="scss">

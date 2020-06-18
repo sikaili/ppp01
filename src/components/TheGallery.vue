@@ -1,10 +1,11 @@
 <template>
   <div
+    v-if="images && images.length>0"
     ref="root"
     class="TheGallery"
     @click="handleClick"
   >
-    <image-container
+    <image-container-component
       v-for="(image, index) of images"
       :key="index"
       :src="image"
@@ -14,7 +15,7 @@
     <div
       v-if="mouseImages.length > 0"
     >
-      <image-container
+      <image-container-component
         v-for="(image, index) of mouseImages"
         v-show="root && image.y < root.offsetHeight"
         :key="index + image"
@@ -30,20 +31,22 @@
 
 <script>
 import {
-  ref, onMounted, onUnmounted, watchEffect, computed,
+  ref, watchEffect, computed,
 } from 'vue';
 import {
   useMouse, useStorage, useDeviceOrientation,
 } from '@vueuse/core';
 import useScrollBottomWindow from '@/js/use/scrollBottomWindow';
-import ImageContainer from '@/components/ImageContainer.vue';
+import useData from '@/js/use/data';
+import ImageContainerComponent from '@/components/ImageContainer.vue';
 
 const useAddImage = () => {
+  const { getData } = useData();
   const images = ref([]);
-  const fetchImage = async () => {
-    const response = await fetch('https://dog.ceo/api/breed/bulldog/french/images/random');
-    const json = await response.json();
-    images.value.push(json.message);
+  const fetchImage = () => {
+    getData('https://dog.ceo/api/breed/bulldog/french/images/random').then((res) => {
+      images.value.push(res.message);
+    });
   };
   const addImage = (quantity = 1, links) => {
     [...Array(quantity)].map((a, index) => {
@@ -59,10 +62,10 @@ const useAddImage = () => {
 };
 
 export default {
-  components: { ImageContainer },
+  components: { ImageContainerComponent },
   // setup(props) {
 
-  setup(props, context) {
+  setup() {
     const root = ref(null);
     const mouseImages = useStorage('images', []);
     const { alpha } = useDeviceOrientation();

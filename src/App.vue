@@ -1,6 +1,6 @@
 <template>
   <div class="App">
-    <the-header />
+    <the-header-component />
     <!-- <p>Capacity: {{ capacity }}</p>
     <button @click="increaseCapacity()">
       Increase Capacity
@@ -10,18 +10,10 @@
 </template>
 
 <script>
-import { ref } from 'vue';
-import TheHeader from '@/components/TheHeader.vue';
+import TheHeaderComponent from '@/components/TheHeader.vue';
 
 export default {
-  components: { TheHeader },
-  setup() {
-    const capacity = ref(3);
-    function increaseCapacity() {
-      capacity.value += 1;
-    }
-    return { capacity, increaseCapacity };
-  },
+  components: { TheHeaderComponent },
 };
 </script>
 <style scoped lang="scss">
