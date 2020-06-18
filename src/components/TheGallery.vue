@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="root"
     class="TheGallery"
     @click="handleClick"
   >
@@ -15,6 +16,7 @@
     >
       <image-container
         v-for="(image, index) of mouseImages"
+        v-show="root && image.y < root.offsetHeight"
         :key="index + image"
         class="TheGallery__add"
         :src="image.src"
@@ -27,10 +29,13 @@
 </template>
 
 <script>
-import { ref, onMounted, onUnmounted } from 'vue';
 import {
-  useMouse, useStorage, useDebounceFn, useDeviceOrientation,
+  ref, onMounted, onUnmounted, watchEffect, computed,
+} from 'vue';
+import {
+  useMouse, useStorage, useDeviceOrientation,
 } from '@vueuse/core';
+import useScrollBottomWindow from '@/js/use/scrollBottomWindow';
 import ImageContainer from '@/components/ImageContainer.vue';
 
 const useAddImage = () => {
@@ -50,7 +55,6 @@ const useAddImage = () => {
     });
   };
   addImage(20);
-
   return { images, addImage };
 };
 
@@ -58,23 +62,14 @@ export default {
   components: { ImageContainer },
   // setup(props) {
 
-  setup() {
+  setup(props, context) {
+    const root = ref(null);
     const mouseImages = useStorage('images', []);
     const { alpha } = useDeviceOrientation();
     const currentImageIndex = ref(0);
     const { images, addImage } = useAddImage();
     const { x, y } = useMouse();
-    onMounted(() => {
-      const onScroll = useDebounceFn(() => {
-        const bottomOfWindow = document.documentElement.scrollTop + window.innerHeight >= document.documentElement.offsetHeight - 30;
-        if (bottomOfWindow) {
-          addImage(20);
-        }
-      }, 200);
-      window.addEventListener('scroll', onScroll);
-    });
-    onUnmounted(() => {
-    });
+    useScrollBottomWindow(addImage, 20);
     const handleClick = () => {
       const offset = -100;
       mouseImages.value.push({
@@ -85,7 +80,7 @@ export default {
       });
     };
     return {
-      images, currentImageIndex, addImage, mouseImages, x, y, handleClick,
+      root, images, currentImageIndex, addImage, mouseImages, x, y, handleClick,
     };
   },
   data() {
