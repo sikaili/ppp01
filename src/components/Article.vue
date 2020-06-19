@@ -66,10 +66,17 @@ import date from '@/js/utils/date';
 export default {
   name: 'Article',
   components: { ImageComponent },
-  setup() {
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+  },
+  setup(props) {
     const articleObject = ref(null);
     const { getData } = useData();
-    getData('/data/article.json').then((res) => { articleObject.value = res; });
+    console.log(props);
+    getData(`/data/${props.id}.json`).then((res) => { articleObject.value = res; });
     const dateFormated = computed(() => {
       if (articleObject.value && articleObject.value.time) {
         const iso = new Date(articleObject.value.time).toISOString();
