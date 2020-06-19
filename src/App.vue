@@ -17,6 +17,8 @@ export default {
 };
 </script>
 <style scoped lang="scss">
+    @import 'main.scss';
+
     .App {
         max-width: 100vw;
         overflow-x: hidden;
