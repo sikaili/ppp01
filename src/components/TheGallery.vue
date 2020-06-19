@@ -8,6 +8,7 @@
     <image-container-component
       v-for="(image, index) of images"
       :key="index"
+      :ref="el => { imgs[index] = el }"
       :src="image"
       :class="{'TheGallery__grey':mouseImages.length > 0}"
       @click="currentImageIndex = index"
@@ -31,10 +32,10 @@
 
 <script>
 import {
-  ref, watchEffect, computed,
+  ref, watchEffect, computed, onBeforeUpdate, onMounted, onUpdated,
 } from 'vue';
 import {
-  useMouse, useStorage, useDeviceOrientation,
+  useMouse, useStorage, useDeviceOrientation, useDebounceFn,
 } from '@vueuse/core';
 import useScrollBottomWindow from '@/js/use/scrollBottomWindow';
 import useData from '@/js/use/data';
@@ -45,10 +46,12 @@ const useAddImage = () => {
   const images = ref([]);
   const fetchImage = () => {
     getData('https://dog.ceo/api/breed/bulldog/french/images/random').then((res) => {
-      images.value.push(res.message);
+      if (res) {
+        images.value.push(res.message);
+      }
     });
   };
-  const addImage = (quantity = 1, links) => {
+  const addImage = useDebounceFn((quantity = 1, links) => {
     [...Array(quantity)].map((a, index) => {
       if (!links) {
         fetchImage();
@@ -56,17 +59,17 @@ const useAddImage = () => {
         images.value.push(links[index]);
       }
     });
-  };
+  }, 100);
   addImage(20);
   return { images, addImage };
 };
 
 export default {
   components: { ImageContainerComponent },
-  // setup(props) {
-
   setup() {
     const root = ref(null);
+    const imgs = ref([]);
+
     const mouseImages = useStorage('images', []);
     const { alpha } = useDeviceOrientation();
     const currentImageIndex = ref(0);
@@ -82,8 +85,20 @@ export default {
         get height() { return alpha.value < 100 ? 150 : alpha.value; },
       });
     };
+    onMounted(() => {
+    });
+    const lastImageOffsetTop = computed(() => imgs.value[imgs.value.length - 1].$el.offsetTop);
+    onUpdated(() => {
+      const offsetBottom = lastImageOffsetTop.value - window.innerHeight;
+      if (offsetBottom < 0) {
+        addImage(Math.floor(-offsetBottom / 200));
+      }
+    });
+    onBeforeUpdate(() => {
+      imgs.value = [];
+    });
     return {
-      root, images, currentImageIndex, addImage, mouseImages, x, y, handleClick,
+      root, imgs, images, currentImageIndex, addImage, mouseImages, x, y, handleClick,
     };
   },
   data() {
@@ -100,7 +115,7 @@ export default {
         width: calc(100% + 500px);
 
         &__grey {
-            filter: grayscale(100%) !important;
+            filter: grayscale(100%);
         }
 
         &__addImage {
