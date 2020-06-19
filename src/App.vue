@@ -1,6 +1,6 @@
 <template>
   <div class="App">
-    <the-header-component />
+    <router-view name="header" />
     <!-- <p>Capacity: {{ capacity }}</p>
     <button @click="increaseCapacity()">
       Increase Capacity
@@ -10,10 +10,7 @@
 </template>
 
 <script>
-import TheHeaderComponent from '@/components/TheHeader.vue';
-
 export default {
-  components: { TheHeaderComponent },
 };
 </script>
 <style scoped lang="scss">
