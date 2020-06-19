@@ -34,9 +34,15 @@ export default {
 </script>
 <style scoped lang="scss">
     .Program {
+        margin-top: $span-vr-large;
         &__container {
+            position: relative;
             display: flex;
             flex-direction: row;
+            max-width: $bp-max;
+            margin: 0 auto;
+            background-color: $color-grey1;
+            // @include color(background-color, color-grey1);
         }
 
         &__placeholder {

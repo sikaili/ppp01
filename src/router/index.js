@@ -2,8 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router';
 import TheHeaderComponent from '@/components/TheHeader.vue';
 import TheGalleryComponent from '@/components/TheGallery.vue';
 
-import Panorama from '@/views/Panorama.vue';
-import Paysage from '@/views/Paysage.vue';
 import Program from '@/views/Program.vue';
 
 const routerHistory = createWebHistory();
@@ -11,12 +9,12 @@ const router = createRouter({
   history: routerHistory,
   routes: [
     {
-      path: '/',
+      path: '/paysage',
       components: {
         header: TheHeaderComponent,
         default: TheGalleryComponent,
       },
-      alias: ['/paysage', '/index.html', '/index.htm'],
+      alias: ['/', '/index.html', '/index.htm', '/404'],
 
     },
     {

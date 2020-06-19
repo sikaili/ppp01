@@ -30,13 +30,13 @@ export default {
 </script>
 <style scoped lang="scss">
     .TheSideNavigation {
+        position: fixed;
         z-index: 1000;
-        flex-flow: column nowrap;
         display: flex;
+        flex-direction: column;
         max-width: 30vw;
-        width: 100%;
         right: 0;
-        top: 0;
+        top: 83px;
         justify-content: space-between;
         text-transform: uppercase;
         background-color: rgba(0,0,0, 0.3);

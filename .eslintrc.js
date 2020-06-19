@@ -17,6 +17,7 @@ module.exports = {
     'import/no-unresolved': 'off',
     'max-len': 'off',
     'vue/no-html': 'off',
+    'consistent-return': 'off',
   },
   globals: {
     Atomics: 'readonly',

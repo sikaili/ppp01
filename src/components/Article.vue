@@ -59,7 +59,7 @@ import ImageComponent from '@/components/ImageContainer.vue';
 import useData from '@/js/use/data';
 
 import {
-  ref, onMounted, onUnmounted, watchEffect, computed,
+  ref, computed,
 } from 'vue';
 import date from '@/js/utils/date';
 
@@ -76,7 +76,7 @@ export default {
     const articleObject = ref(null);
     const { getData } = useData();
     console.log(props);
-    getData(`/data/${props.id}.json`).then((res) => { articleObject.value = res; });
+    getData(`/data/${props.id}.json`, { required: true }).then((res) => { articleObject.value = res; });
     const dateFormated = computed(() => {
       if (articleObject.value && articleObject.value.time) {
         const iso = new Date(articleObject.value.time).toISOString();
@@ -91,6 +91,7 @@ export default {
     .Article {
         font-family: Helvetica, Arial, sans-serif;
         font-size: 16px;
+        max-width: 100%;
 
         .container__main {
             margin: $span-vr*4 $span-hr;

@@ -27,6 +27,7 @@ export default {
         position: fixed;
         max-width: 100vw;
         width: 100%;
+        height: 83px;
         top: 0;
         z-index: 1000;
         display: flex;
@@ -49,7 +50,7 @@ export default {
 
         @media(max-width: 768px) {
             &__item {
-                padding: 10px 5px;
+                padding: 30px 5px 10px;
                 font-size: calc(100vw / 25);
             }
         }
