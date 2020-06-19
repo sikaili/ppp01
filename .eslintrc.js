@@ -16,6 +16,7 @@ module.exports = {
     'no-param-reassign': 'off',
     'import/no-unresolved': 'off',
     'max-len': 'off',
+    'vue/no-html': 'off',
   },
   globals: {
     Atomics: 'readonly',
