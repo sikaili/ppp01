@@ -11,7 +11,15 @@
             :key="index"
             class="article__header"
           >
-            {{ block.data.text }}
+            <h1 v-if="block.data.level === 1">
+              {{ block.data.text }}
+            </h1>
+            <h2 v-else-if="block.data.level === 2">
+              {{ block.data.text }}
+            </h2>
+            <h3 v-else-if="block.data.level === 3">
+              {{ block.data.text }}
+            </h3>
           </div>
           <div
             v-if="block.type === 'paragraph'"
@@ -19,42 +27,87 @@
             class="article__paragraph"
             v-html="block.data.text"
           />
+          <ul
+            v-if="block.type === 'list'"
+            :key="index"
+            class="article__list"
+          >
+            <li
+              v-for="item in block.data.items"
+              :key="item"
+            >
+              {{ item }}
+            </li>
+            =
+          </ul>
+          <div
+            v-if="block.type === 'image'"
+            :key="index"
+          >
+            <image-component :src="block.data.file.url" />
+          </div>
         </template>
-        <image-container />
+        <div class="Article__publication">
+          <span class="Article__publishDate">published le {{ dateFormated }}</span>
+        </div>
       </div>
     </article>
   </div>
 </template>
 <script>
-import ImageContainer from '@/components/ImageContainer.vue';
+import ImageComponent from '@/components/ImageContainer.vue';
 import useData from '@/js/use/data';
 
 import {
   ref, onMounted, onUnmounted, watchEffect, computed,
 } from 'vue';
+import date from '@/js/utils/date';
 
 export default {
   name: 'Article',
-  components: { ImageContainer },
+  components: { ImageComponent },
   setup() {
     const articleObject = ref(null);
     const { getData } = useData();
     getData('/data/article.json').then((res) => { articleObject.value = res; });
-    return { articleObject };
+    const dateFormated = computed(() => {
+      if (articleObject.value && articleObject.value.time) {
+        const iso = new Date(articleObject.value.time).toISOString();
+        return date(articleObject.value.time, 'd MMMM yyyy HH:mm');
+      }
+    });
+    return { articleObject, dateFormated };
   },
 };
 </script>>
 <style lang="scss" scoped>
     .Article {
         font-family: Helvetica, Arial, sans-serif;
+        font-size: 16px;
 
         .container__main {
-            margin-top: 72px;
+            margin: $span-vr*4 $span-hr;
         }
 
         .article {
+            margin: $span-vr $span-hr;
+
             &__header {
-                font-size: 48px;
+                h1 {
+                    font-size: 36px;
+                }
+
+                h2 {
+                    font-size: 32px;
+                }
+
+                h3 {
+                    font-size: 24px;
+                }
+            }
+
+            &__paragraph {
+                margin: $span-hr-small 0;
             }
         }
     }
