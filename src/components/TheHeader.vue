@@ -36,6 +36,7 @@ export default {
         text-transform: uppercase;
         font-family: "Sporting Grotesque_Bold", "AdobeBlank", sans-serif;
         font-size: 28px;
+        // backdrop-filter: blur(3px);
         background-color: rgba(0,0,0, 0.3);
 
         &__item {

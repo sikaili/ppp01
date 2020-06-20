@@ -1,41 +1,29 @@
 <template>
   <div
-    v-if="images && images.length>0"
     ref="root"
     class="TheGallery"
     @click="handleClick"
   >
-    <image-container-component
-      v-for="(image, index) of images"
+    <router-link
+      v-for="(item, index) of itemsToShow"
       :key="index"
-      :ref="el => { imgs[index] = el }"
-      :src="image"
-      :class="{'TheGallery__grey':mouseImages.length > 0}"
-      @click="currentImageIndex = index"
-    />
-    <div
-      v-if="mouseImages.length > 0"
+      :to="{ name: 'program', params: { articleId: item.articleId }}"
     >
       <image-container-component
-        v-for="(image, index) of mouseImages"
-        v-show="root && image.y < root.offsetHeight"
-        :key="index + image"
-        class="TheGallery__add"
-        :src="image.src"
-        :style="{top:image.y +'px',left:image.x + 'px' }"
-        :height="image.height"
-        @click.stop="mouseImages.splice(index,1)"
+        :ref="el => { imgRefs[index] = el }"
+        :src="item.src"
+        @click="currentImageIndex = index"
       />
-    </div>
+    </router-link>
   </div>
 </template>
 
 <script>
 import {
-  ref, watchEffect, computed, onBeforeUpdate, onMounted, onUpdated,
+  ref, computed, onBeforeUpdate, onUpdated,
 } from 'vue';
 import {
-  useMouse, useStorage, useDeviceOrientation, useDebounceFn,
+  useMouse, useDebounceFn,
 } from '@vueuse/core';
 import useScrollBottomWindow from '@/js/use/scrollBottomWindow';
 import useData from '@/js/use/data';
@@ -43,62 +31,54 @@ import ImageContainerComponent from '@/components/ImageContainer.vue';
 
 const useAddImage = () => {
   const { getData } = useData();
-  const images = ref([]);
-  const fetchImage = () => {
-    getData('https://dog.ceo/api/breed/bulldog/french/images/random').then((res) => {
-      if (res) {
-        images.value.push(res.message);
-      }
+  const items = ref([]);
+  getData('/data/home.json').then((res) => {
+    res.forEach((obj) => {
+      obj.show = false;
     });
-  };
-  const addImage = useDebounceFn((quantity = 1, links) => {
-    [...Array(quantity)].map((a, index) => {
-      if (!links) {
-        fetchImage();
-      } else {
-        images.value.push(links[index]);
-      }
-    });
-  }, 100);
-  addImage(20);
-  return { images, addImage };
+    items.value = res;
+  });
+  return { items };
 };
 
 export default {
   components: { ImageContainerComponent },
   setup() {
     const root = ref(null);
-    const imgs = ref([]);
-
-    const mouseImages = useStorage('images', []);
-    const { alpha } = useDeviceOrientation();
+    const imgRefs = ref([]);
     const currentImageIndex = ref(0);
-    const { images, addImage } = useAddImage();
+    const currentHoverIndex = ref(0);
+    const { items } = useAddImage();
     const { x, y } = useMouse();
-    useScrollBottomWindow(addImage, 20);
+    const showImageQuantity = ref(5);
     const handleClick = () => {
-      const offset = -100;
-      mouseImages.value.push({
-        x: x.value + offset,
-        y: y.value + offset,
-        src: images.value[currentImageIndex.value],
-        get height() { return alpha.value < 100 ? 150 : alpha.value; },
-      });
+
     };
-    onMounted(() => {
+    const lastImageOffsetTop = computed(() => {
+      if (imgRefs.value.length > 0) {
+        return imgRefs.value[imgRefs.value.length - 1].$el.offsetTop;
+      }
+      return 0;
     });
-    const lastImageOffsetTop = computed(() => imgs.value[imgs.value.length - 1].$el.offsetTop);
+
+    const addImage = useDebounceFn((step = 1) => {
+      showImageQuantity.value += step;
+    }, 30);
+    useScrollBottomWindow(addImage, 15);
     onUpdated(() => {
       const offsetBottom = lastImageOffsetTop.value - window.innerHeight;
       if (offsetBottom < 0) {
-        addImage(Math.floor(-offsetBottom / 200));
+        addImage();
       }
     });
     onBeforeUpdate(() => {
-      imgs.value = [];
+      imgRefs.value = [];
     });
+
+    const itemsToShow = computed(() => items.value.slice(0, showImageQuantity.value));
+    console.log(itemsToShow);
     return {
-      root, imgs, images, currentImageIndex, addImage, mouseImages, x, y, handleClick,
+      root, imgRefs, itemsToShow, currentImageIndex, currentHoverIndex, x, y, handleClick,
     };
   },
   data() {
